@@ -11,8 +11,8 @@ public class Food {
 	public static Random r = new Random();
 	
 	public Food(){
-		this.x = r.nextInt(800);
-		this.y = r.nextInt(700);
+		this.x = 0;
+		this.y = 0;
 		this.width = 10;
 		this.height = 10;
 		this.food = new Rectangle(this.x, this.y, this.width, this.height);

@@ -21,28 +21,35 @@ public class Snake extends JPanel implements ActionListener, KeyListener{
 	private static final long serialVersionUID = 1L;
 
 	public static JFrame jf = new JFrame();
-	Timer tm = new Timer(200, this);
+	Timer tm = new Timer(100, this);
 	public static ArrayList<Rectangle> body = new ArrayList<Rectangle>();
-	int velX = 0, velY = 20;
-	char direction = 'd';
+	int velX = 0, velY = 10;
+	public static char direction = 'd';
 	public Head h = new Head();
 	public Food f = new Food();
-	
+
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.setColor(Color.GREEN);
-		g.fillRect(h.x, h.y, h.width, h.height);
+		g.fillRect(h.head.x, h.head.y, h.head.width, h.head.height);
 		g.setColor(Color.RED);
-		g.fillRect(f.x, f.y, f.width, f.height);
+		g.fillRect(f.food.x, f.food.y, f.food.width, f.food.height);
 		g.setColor(Color.GREEN);
-		for (Rectangle i : body){
-			if (f.food.intersects(h.head)){
-				Snake.body.add(new Rectangle(h.x, h.y, h.width, h.height));
-				g.fillRect(i.x - 10 * body.size(), i.y, i.width, i.height);
-				g.clearRect(f.food.x, f.food.y, f.food.width, f.food.height);
-			}
+		body.add(new Rectangle(h.head.x, h.head.y, h.head.width, h.head.height));
+		if (!h.head.intersects(f.food)){
+			body.remove(0);
 		}
+		if (h.head.intersects(f.food)){
+			f.food.x = Food.r.nextInt(700);
+			f.food.y = Food.r.nextInt(600);
+			f.food.x = f.food.x / 20 * 20;
+			f.food.y = f.food.y / 20 * 20;
+		}	
+		for (Rectangle j : body){
+			g.fillRect(j.x, j. y, j.width, j.height);
+		}	
 	}
+
 	public Snake(){
 		tm.start();
 		addKeyListener(this);
@@ -52,55 +59,59 @@ public class Snake extends JPanel implements ActionListener, KeyListener{
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		int c = e.getKeyCode();
-		if (c == KeyEvent.VK_UP){
-			velY = -20;
+		if (c == KeyEvent.VK_UP && direction != 'd'){
+			velY = -10;
 			velX = 0;
+			direction = 'u';
 		}
-		if (c == KeyEvent.VK_DOWN){
-			velY = 20;
+		else if (c == KeyEvent.VK_DOWN && direction != 'u'){
+			velY = 10;
 			velX = 0;
+			direction = 'd';
 		}
-		if (c == KeyEvent.VK_LEFT){
+		else if (c == KeyEvent.VK_LEFT && direction != 'r'){
 			velY = 0;
-			velX = -20;
+			velX = -10;
+			direction = 'l';
 		}
-		if (c == KeyEvent.VK_RIGHT){
+		else if (c == KeyEvent.VK_RIGHT && direction != 'l'){
 			velY = 0;
-			velX = 20;
+			velX = 10;
+			direction = 'r';
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (h.x < 0){
-			h.x = 0;
+		if (h.head.x < 0){
+			h.head.x = 0;
 			repaint();
 		}
-		if (h.x > 790){
-			h.x = 790;
+		if (h.head.x > 790){
+			h.head.x = 790;
 			repaint();
 		}
-		if (h.y < 0){
-			h.y = 0;
+		if (h.head.y < 0){
+			h.head.y = 0;
 			repaint();
 		}
-		if (h.y > 700){
-			h.y = 700;
+		if (h.head.y > 700){
+			h.head.y = 700;
 			repaint();
 		}
-		h.x += velX;
-		h.y += velY;
+		h.head.x += velX;
+		h.head.y += velY;
 		repaint();
 	}
 	public static void main(String[] args) {
