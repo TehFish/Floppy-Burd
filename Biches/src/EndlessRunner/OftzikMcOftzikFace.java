@@ -1,17 +1,20 @@
 package EndlessRunner;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.Timer;
-import java.util.*;
 
 public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyListener{
 
@@ -22,21 +25,29 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			score++;
-			dist -= 5;
 		}
 	} );
-	public static int carVel = 2, pX = 200, score = 0, dist = 500, check;
-	public static Rectangle player = new Rectangle(203, 500, 45, 50); 
-	public static Rectangle car1 = new Rectangle(203, 800, 45, 50); 
-	public static Rectangle car2 = new Rectangle(253, 800, 45, 50); 
-	public static Rectangle car3 = new Rectangle(303, 400, 45, 50); 
-	public static Rectangle car4 = new Rectangle(353, 400, 45, 50); 
+	public Timer speed = new Timer(70, new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			carVel += 0.001;
+		}
+	});
+	public static int pX = 200, score = 0, dist = 500, check;
+	public static double carVel = 2;
+	public static Rectangle player = new Rectangle(211, 500, 28, 50); 
+	public static Rectangle car1 = new Rectangle(203, 800, 45, 45); 
+	public static Rectangle car2 = new Rectangle(253, 800, 45, 45); 
+	public static Rectangle car3 = new Rectangle(303, 400, 45, 45); 
+	public static Rectangle car4 = new Rectangle(353, 400, 45, 45); 
 	public static Rectangle point = new Rectangle(220, 0, 10, 10);
 	public static Random r = new Random();
 
 	public OftzikMcOftzikFace(){
 		tm.start();
 		scoreTm.start();
+		speed.start();
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -44,30 +55,64 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.setColor(Color.BLUE);
-		g.fillRect(player.x, player.y, player.width, player.height);
-		g.setColor(Color.BLACK);
-		g.drawLine(200, 0, 200, 800);
-		g.drawLine(250, 0, 250, 800);
-		g.drawLine(300, 0, 300, 800);
-		g.drawLine(350, 0, 350, 800);
-		g.drawLine(400, 0, 400, 800);
-		g.setColor(Color.GREEN);
-		g.fillRect(0, 0, 200, 800);
-		g.fillRect(401, 0, 200, 800);
-		g.setColor(Color.RED);
-		g.fillRect(car1.x, car1.y, car1.width, car1.height);
-		g.fillRect(car2.x, car2.y, car2.width, car2.height);
-		g.fillRect(car3.x, car3.y, car3.width, car3.height);
-		g.fillRect(car4.x, car4.y, car4.width, car4.height);
-		g.setColor(Color.ORANGE);
-		g.fillRect(point.x, point.y, point.width, point.height);
+		Graphics2D g2 = (Graphics2D) g;
+		ImageIcon img = new ImageIcon("//Users//galbalaban//Desktop//JavaFiles//car.png");
+		ImageIcon playerImg = new ImageIcon("//Users//galbalaban//Desktop//JavaFiles//greencar.png");
+		g2.setColor(Color.BLUE);
+		playerImg.paintIcon(this, g2, player.x, player.y);
+		g2.setColor(Color.BLACK);
+		g2.drawLine(200, 0, 200, 800);
+		g2.drawLine(250, 0, 250, 800);
+		g2.drawLine(300, 0, 300, 800);
+		g2.drawLine(350, 0, 350, 800);
+		g2.drawLine(400, 0, 400, 800);
+		g2.setColor(new Color(0, 150, 0));
+		g2.fillRect(0, 0, 200, 800);
+		g2.fillRect(401, 0, 200, 800);
+		g2.setColor(Color.RED);
+		img.paintIcon(this, g2, car1.x, car1.y);
+		img.paintIcon(this, g2, car2.x, car2.y);
+		img.paintIcon(this, g2, car3.x, car3.y);
+		img.paintIcon(this, g2, car4.x, car4.y);
+		
+		/**
+		g2.setColor(Color.YELLOW);
+		g2.fillRect(car1.x + 30, car1.y + 40, 10, 10);
+		g2.fillRect(car1.x + 5, car1.y + 40, 10, 10);
+		g2.fillRect(car2.x + 30, car2.y + 40, 10, 10);
+		g2.fillRect(car2.x + 5, car2.y + 40, 10, 10);
+		g2.fillRect(car3.x + 30, car3.y + 40, 10, 10);
+		g2.fillRect(car3.x + 5, car3.y + 40, 10, 10);
+		g2.fillRect(car4.x + 30, car4.y + 40, 10, 10);
+		g2.fillRect(car4.x + 5, car4.y + 40, 10, 10);
+		g2.setColor(Color.DARK_GRAY);
+		g2.fillRect(car1.x - 3, car1.y + 5, 7, 15);
+		g2.fillRect(car1.x - 3, car1.y + 30, 7, 15);
+		g2.fillRect(car1.x + 42, car1.y + 5, 7, 15);
+		g2.fillRect(car1.x + 42, car1.y + 30, 7, 15);
+		g2.fillRect(car2.x - 3, car2.y + 5, 7, 15);
+		g2.fillRect(car2.x - 3, car2.y + 30, 7, 15);
+		g2.fillRect(car2.x + 42, car2.y + 5, 7, 15);
+		g2.fillRect(car2.x + 42, car2.y + 30, 7, 15);
+		g2.fillRect(car3.x - 3, car3.y + 5, 7, 15);
+		g2.fillRect(car3.x - 3, car3.y + 30, 7, 15);
+		g2.fillRect(car3.x + 42, car3.y + 5, 7, 15);
+		g2.fillRect(car3.x + 42, car3.y + 30, 7, 15);
+		g2.fillRect(car4.x - 3, car4.y + 5, 7, 15);
+		g2.fillRect(car4.x - 3, car4.y + 30, 7, 15);
+		g2.fillRect(car4.x + 42, car4.y + 5, 7, 15);
+		g2.fillRect(car4.x + 42, car4.y + 30, 7, 15);
+		**/
+		
+		g2.setColor(Color.ORANGE);
+		g2.fill(point);
 		if (point.intersects(player))
 			createPoint();
-		g.setColor(Color.BLACK);
-		g.drawString("Score: "+score, 10, 10);
+		g2.setColor(Color.BLACK);
+		g2.setFont(new Font("Ariel", Font.PLAIN, 30));
+		g2.drawString("Score: "+score, 250, 100);
 		if (car1.intersects(player) || car2.intersects(player) || car3.intersects(player) || car4.intersects(player)){
-			exit(tm, scoreTm);
+			exit(tm, scoreTm, speed);
 		}
 	}
 
@@ -87,11 +132,6 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
 		int c = e.getKeyCode();
 		if (c == KeyEvent.VK_LEFT)
 			player.x -= 50;
@@ -100,13 +140,18 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 	}
 
 	@Override
+	public void keyReleased(KeyEvent e) {
+	
+	}
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (player.x > 350){
-			player.x = 353;
+			player.x = 361;
 			repaint();
 		}
 		if (player.x < 200){
-			player.x = 203;
+			player.x = 211;
 			repaint();
 		}
 		car1.y += carVel;
@@ -115,10 +160,7 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 		car4.y += carVel;
 		point.y += 1;
 		repaint();
-		if (dist < 200){
-			dist = 500;
-			carVel++;
-		}
+
 		if (car1.y > 800){
 			car1.y = r.nextInt(dist) * -1;
 			repaint();
@@ -140,12 +182,14 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 			repaint();
 		}
 	}
-	public static void exit(Timer tm, Timer scoreTm){
+	public static void exit(Timer tm, Timer scoreTm, Timer speed){
 		tm.stop();
 		scoreTm.stop();
+		speed.stop();
 		try {
 			Thread.sleep(3000);
-			player.x = 203;
+			player.x = 211;
+			carVel = 2;
 			car1.y = 800;
 			car2.y = 800;
 			car3.y = 400;
@@ -153,6 +197,7 @@ public class OftzikMcOftzikFace extends JPanel implements ActionListener, KeyLis
 			score = 0;
 			tm.start();
 			scoreTm.start();
+			speed.start();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

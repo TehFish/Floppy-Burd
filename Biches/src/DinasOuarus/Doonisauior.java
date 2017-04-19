@@ -2,11 +2,13 @@ package DinasOuarus;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -21,22 +23,25 @@ public class Doonisauior extends JPanel implements ActionListener, KeyListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			score++;
+			cactusVel += 0.001;
 		}
 	});
 	public Random r = new Random();
 	public Timer scoreTm = new Timer(5, this);
-	public static Rectangle c1 = new Rectangle(800, 520, 40, 60);
-	public static Rectangle player = new Rectangle(200, 540, 20, 40);
-	public static int playerVelY = 0, cactusVel = 2, temp = 0, score = 0;
-
+	public static Rectangle2D.Double c1 = new Rectangle2D.Double(800, 520, 40, 60);
+	public static Rectangle2D.Double player = new Rectangle2D.Double(200, 540, 20, 40);
+	public static int playerVelY = 0, temp = 0, score = 0;
+	public static double cactusVel = 2;
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
-		g.setColor(Color.BLACK);
-		g.fillRect(player.x, player.y, player.width, player.height);
-		g.setColor(Color.GREEN);
-		g.fillRect(c1.x, c1.y, c1.width, c1.height);
-		g.setColor(Color.BLACK);
-		g.drawString("Score: "+score, 10, 10);
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(Color.BLACK);
+		g2.fill(player);
+		g2.setColor(Color.GREEN);
+		g2.fill(c1);
+		g2.setColor(Color.BLACK);
+		g2.drawString("Score: "+score, 10, 10);
 		if (player.intersects(c1))
 			exit(tm, scoring);
 	}
